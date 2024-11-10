@@ -3,7 +3,7 @@
 
 祝日データについては[内閣府ホームページ記載](https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html)の
 [昭和30年（1955年）から令和7年（2025年）国民の祝日（csv形式：20KB）](https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv)を元に作成。  
-1955年から2024年までの祝日データを年単位（YYYY形式）で取得できます。  
+1955年から2025年までの祝日データを年単位（YYYY形式）で取得できます。  
 銀行休業日は含まれません。  
 振替休日がある場合は振替休日も合わせて返却します。  
 
