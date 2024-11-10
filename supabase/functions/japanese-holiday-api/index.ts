@@ -57,7 +57,7 @@ Deno.serve(async (req) => {
     try {
       // DBから対象の祝日を取得
       const yearPatternForQuery = `${year}%`;
-      const query = `SELECT * FROM holidays WHERE holiday_date LIKE $1`;
+      const query = `SELECT * FROM holidays WHERE holiday_date LIKE $1 ORDER BY holiday_date`;
 
       const { rows } = await connection.queryArray(query, [yearPatternForQuery]);
 
