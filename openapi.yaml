@@ -1,0 +1,82 @@
+openapi: 3.0.3
+info:
+  title: Japanese Holiday API
+  description: 日本の祝日を取得するAPI。1955年から2025年までの祝日を取得できます。
+  version: "1.0.0"
+
+servers:
+  - url: https://your-api-url.com
+
+paths:
+  /japanese-holiday-api/{year}:
+    get:
+      summary: "指定された年の日本の祝日を取得"
+      description: "年を指定してその年の日本の祝日を取得します。"
+      parameters:
+        - name: year
+          in: path
+          required: true
+          description: 祝日を取得する年（YYYY形式）
+          schema:
+            type: string
+            pattern: "^[0-9]{4}$"
+            example: "2024"
+      responses:
+        "200":
+          description: 指定した年の祝日のリスト
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  holidays:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        holidayDate:
+                          type: string
+                          format: date
+                          description: 祝日の年月日（YYYYMMdDD形式）
+                        holidayName:
+                          type: string
+                          description: 祝日名
+              example:
+                holidays:
+                  - holidayDate: "20240101"
+                    holidayName: "元日"
+                  - holidayDate: "20240108"
+                    holidayName: "成人の日"
+        "400":
+          description: "リクエストが不正な場合（例：年がYYYY形式でない）"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "The year is not in the YYYY format."
+        "405":
+          description: "許可されていないHTTPメソッドが使用された場合"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Method Not Allowed."
+        "500":
+          description: "サーバーエラー"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Internal Server Error."
