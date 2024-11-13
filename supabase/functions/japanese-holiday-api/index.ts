@@ -1,7 +1,6 @@
 import { StatusCodes } from 'https://deno.land/x/https_status_codes/mod.ts';
 import * as postgres from 'https://deno.land/x/postgres@v0.17.0/mod.ts';
 
-
 type HolidayInfo = {
   holidayDate: string;
   holidayName: string;
@@ -75,7 +74,7 @@ Deno.serve(async (req) => {
 
       // レスポンス返却
       return new Response(JSON.stringify(response), {
-        status: 200,
+        status: StatusCodes.OK,
         headers: { 'Content-Type': 'application/json; charset=utf-8' },
       });
     } finally {
