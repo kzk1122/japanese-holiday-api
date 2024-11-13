@@ -1,4 +1,6 @@
+import { StatusCodes } from 'https://deno.land/x/https_status_codes/mod.ts';
 import * as postgres from 'https://deno.land/x/postgres@v0.17.0/mod.ts';
+
 
 type HolidayInfo = {
   holidayDate: string;
@@ -33,7 +35,7 @@ Deno.serve(async (req) => {
 
     // GET以外のリクエストは拒否
     if (method !== 'GET') {
-      return buildErrorResponse('Method Not Allowed.', 405);
+      return buildErrorResponse('Method Not Allowed.', StatusCodes.METHOD_NOT_ALLOWED);
     }
 
     // pathparamの取得
@@ -43,12 +45,12 @@ Deno.serve(async (req) => {
 
     // yearが形式通りセットされていない場合はエラー
     if (!year) {
-      return buildErrorResponse('Year is not set properly.', 400);
+      return buildErrorResponse('Year is not set properly.', StatusCodes.BAD_REQUEST);
     }
 
     const yearRegex = /^\d{4}$/; // YYYY形式
     if (!yearRegex.test(year)) {
-      return buildErrorResponse('The year is not in the YYYY format.', 400);
+      return buildErrorResponse('The year is not in the YYYY format.', StatusCodes.BAD_REQUEST);
     }
 
     // コネクションプールから接続を取得する
@@ -82,6 +84,6 @@ Deno.serve(async (req) => {
     }
   } catch (error) {
     console.error(error);
-    return buildErrorResponse(`Internal Server Error.`, 500);
+    return buildErrorResponse(`Internal Server Error.`, StatusCodes.INTERNAL_SERVER_ERROR);
   }
 })
