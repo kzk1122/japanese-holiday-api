@@ -15,12 +15,12 @@ type ErrorInfo = {
 }
 
 // 環境変数からデータベース接続URLを取得
-const DATABASE_URL = Deno.env.get('SUPABASE_DB_URL')!
+const DATABASE_URL: string = Deno.env.get('SUPABASE_DB_URL')!
 // 環境変数から接続プールのサイズを取得
-const CONNECTION_POOL_SIZE = Number(Deno.env.get('CONNECTION_POOL_SIZE') ?? 3); 
+const CONNECTION_POOL_SIZE: number = Number(Deno.env.get('CONNECTION_POOL_SIZE') ?? 3); 
 
 // コネクションプールを作成
-const pool = new postgres.Pool(DATABASE_URL, CONNECTION_POOL_SIZE, true);
+const pool:postgres.Pool = new postgres.Pool(DATABASE_URL, CONNECTION_POOL_SIZE, true);
 
 // エラーレスポンスを返却
 function buildErrorResponse(message: string, status: number): Response {
@@ -28,7 +28,7 @@ function buildErrorResponse(message: string, status: number): Response {
   return new Response(JSON.stringify(errorMessage), { status });
 }
 
-Deno.serve(async (req) => {
+Deno.serve(async (req: Request) => {
   try {
     const { url, method } = req;
 
@@ -38,16 +38,16 @@ Deno.serve(async (req) => {
     }
 
     // pathparamの取得
-    const yearPattern = new URLPattern({ pathname: '/japanese-holiday-api/:year' });
-    const matchingPath = yearPattern.exec(url);
-    const year = matchingPath ? matchingPath.pathname.groups.year : null;
+    const yearPattern: URLPattern = new URLPattern({ pathname: '/japanese-holiday-api/:year' });
+    const matchingPath: URLPatternResult | null = yearPattern.exec(url);
+    const year: string | null | undefined = matchingPath ? matchingPath.pathname.groups.year : null;
 
     // yearが形式通りセットされていない場合はエラー
     if (!year) {
       return buildErrorResponse('Year is not set properly.', StatusCodes.BAD_REQUEST);
     }
 
-    const yearRegex = /^\d{4}$/; // YYYY形式
+    const yearRegex: RegExp = /^\d{4}$/; // YYYY形式
     if (!yearRegex.test(year)) {
       return buildErrorResponse('The year is not in the YYYY format.', StatusCodes.BAD_REQUEST);
     }
@@ -57,15 +57,15 @@ Deno.serve(async (req) => {
 
     try {
       // DBから対象の祝日を取得
-      const yearPatternForQuery = `${year}%`;
+      const yearPatternForQuery: string = `${year}%`;
       const query = `SELECT * FROM holidays WHERE holiday_date LIKE $1 ORDER BY holiday_date`;
 
       const { rows } = await connection.queryArray(query, [yearPatternForQuery]);
 
       // APIレスポンス作成
       const holidays: HolidayInfo[] = rows.map(row => ({
-        holidayDate: row[0],
-        holidayName: row[1]
+        holidayDate: String(row[0]),
+        holidayName: String(row[1])
       }));
   
       const response: HolidayInfoResponse = {
