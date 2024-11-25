@@ -1,4 +1,4 @@
-import { StatusCodes } from 'https://deno.land/x/https_status_codes/mod.ts';
+import { StatusCodes } from "https://deno.land/x/https_status_codes@v1.2.0/mod.ts";
 import * as postgres from 'https://deno.land/x/postgres@v0.17.0/mod.ts';
 
 type HolidayInfo = {
